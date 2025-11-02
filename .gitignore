@@ -1,0 +1,46 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+api/node_modules
+api/.pnp
+api/.pnp.*
+api/.yarn/*
+api/!.yarn/patches
+api/!.yarn/plugins
+api/!.yarn/releases
+api/!.yarn/versions
+
+# testing
+api/coverage
+
+# next.js
+api/.next/
+api/out/
+
+# production
+api/build
+
+# misc
+api/.DS_Store
+api/*.pem
+
+# debug
+api/npm-debug.log*
+api/yarn-debug.log*
+api/yarn-error.log*
+api/.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+api/.env*
+
+# vercel
+api/.vercel
+
+# typescript
+api/*.tsbuildinfo
+api/next-env.d.ts
+
+api/src/generated/prisma
+
+venv
+Notes
