@@ -31,3 +31,43 @@ export const DELETE = async (
     success: true,
   });
 };
+
+// buat service PUT (change data)
+export const PUT = async (
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) => {
+  const { slug } = await params;
+  const body = await request.json();
+
+  const checkData = await prisma.rumah.findFirst({
+    where: {
+      id: Number(slug),
+    },
+  });
+
+  // chekc if data is not exist
+  if (!checkData) {
+    return NextResponse.json(
+      {
+        message: "Gagal diubah, data tidak ada",
+        success: false,
+      },
+      { status: 404 }
+    );
+  }
+  // check if data is exist
+  else
+    await prisma.rumah.update({
+      where: {
+        id: Number(slug),
+      },
+      data: {
+        houseSize: body.houseSize,
+      },
+    });
+  return NextResponse.json({
+    message: "Data barang berhasil diubah",
+    success: true,
+  });
+};
