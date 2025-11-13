@@ -8,6 +8,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { houseSize } = body;
 
+    // avoid missmatch data type
     if (typeof houseSize !== "number") {
       return NextResponse.json(
         { error: "houseSize must be a number" },
