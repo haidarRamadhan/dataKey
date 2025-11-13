@@ -15,35 +15,53 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send houseSize to Flask API
-    const resp = await fetch("http://localhost:5000/predict", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    // check data to avoid redundance
+    const check_data = await prisma.rumah.findFirst({
+      where: {
+        houseSize: body.houseSize,
       },
-      body: JSON.stringify({ houseSize }),
+      select: {
+        houseSize: true,
+      },
     });
-    const result = await resp.json();
-    console.log("Flask response:", result);
 
-    if (!result.price) {
-      return NextResponse.json(
-        { error: "FLask did not return price" },
-        { status: 500 }
-      );
+    // if data houseSize is exist
+    if (check_data) {
+      return NextResponse.json({
+        message: "Ukuran rumah sudah ada ",
+        success: false,
+      });
+    } else {
+      // Send houseSize to Flask API
+      const resp = await fetch("http://localhost:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ houseSize }),
+      });
+      const result = await resp.json();
+      console.log("Flask response:", result);
+
+      if (!result.price) {
+        return NextResponse.json(
+          { error: "FLask did not return price" },
+          { status: 500 }
+        );
+      }
+
+      const price = result.price;
+
+      // Save to database
+      const saved = await prisma.rumah.create({
+        data: { houseSize, price },
+      });
+
+      return NextResponse.json({
+        message: "Predcition saved succesfully",
+        data: saved,
+      });
     }
-
-    const price = result.price;
-
-    // Save to database
-    const saved = await prisma.rumah.create({
-      data: { houseSize, price },
-    });
-
-    return NextResponse.json({
-      message: "Predcition saved succesfully",
-      data: saved,
-    });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -52,3 +70,5 @@ export async function POST(request: Request) {
     );
   }
 }
+//   );
+// }
