@@ -3,6 +3,9 @@ import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
+// =============
+// POST SERVICE
+// =============
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -71,5 +74,17 @@ export async function POST(request: Request) {
     );
   }
 }
-//   );
-// }
+
+// =============
+// GET SERVICE
+// =============
+export const GET = async () => {
+  const data = await prisma.rumah.findMany({
+    orderBy: {
+      id: "asc",
+    },
+  });
+  return NextResponse.json({
+    rumah: data,
+  });
+};
