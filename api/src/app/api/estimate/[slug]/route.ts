@@ -67,7 +67,7 @@ export const PUT = async (
       },
     });
   return NextResponse.json({
-    message: "Data berhasil diubah",
+    message: "Data barang berhasil diubah",
     success: true,
   });
 };
