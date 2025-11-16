@@ -1,75 +1,73 @@
-import { NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
+import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const { houseSize } = body;
+// create servive DELETE
+export const DELETE = async (
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) => {
+  const { slug } = await params;
+  console.log(slug);
 
-    // avoid missmatch data type
-    if (typeof houseSize !== "number") {
-      return NextResponse.json(
-        { error: "houseSize must be a number" },
-        { status: 400 }
-      );
-    }
+  const checkData = await prisma.rumah.findUnique({
+    where: { id: Number(slug) },
+  });
 
-    // check data to avoid redundance
-    const check_data = await prisma.rumah.findFirst({
-      where: {
-        houseSize: body.houseSize,
-      },
-      select: {
-        houseSize: true,
-      },
-    });
-
-    // if data houseSize is exist
-    if (check_data) {
-      return NextResponse.json({
-        message: "Ukuran rumah sudah ada ",
-        success: false,
-      });
-    } else {
-      // Send houseSize to Flask API
-      const resp = await fetch("http://localhost:5000/predict", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ houseSize }),
-      });
-      const result = await resp.json();
-      console.log("Flask response:", result);
-
-      if (!result.price) {
-        return NextResponse.json(
-          { error: "FLask did not return price" },
-          { status: 500 }
-        );
-      }
-
-      const price = result.price;
-
-      // Save to database
-      const saved = await prisma.rumah.create({
-        data: { houseSize, price },
-      });
-
-      return NextResponse.json({
-        message: "Predcition saved succesfully",
-        data: saved,
-      });
-    }
-  } catch (error) {
-    console.error(error);
+  if (!checkData) {
     return NextResponse.json(
-      { error: "Failed to process request" },
-      { status: 500 }
+      { message: "Data tidak ditemukan", success: false },
+      { status: 404 }
     );
   }
-}
-//   );
-// }
+
+  await prisma.rumah.delete({
+    where: { id: Number(slug) },
+  });
+
+  return NextResponse.json({
+    message: "Data berhasil dihapus",
+    success: true,
+  });
+};
+
+// buat service PUT (change data)
+export const PUT = async (
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) => {
+  const { slug } = await params;
+  const body = await request.json();
+
+  const checkData = await prisma.rumah.findFirst({
+    where: {
+      id: Number(slug),
+    },
+  });
+
+  // chekc if data is not exist
+  if (!checkData) {
+    return NextResponse.json(
+      {
+        message: "Gagal diubah, data tidak ada",
+        success: false,
+      },
+      { status: 404 }
+    );
+  }
+  // check if data is exist
+  else
+    await prisma.rumah.update({
+      where: {
+        id: Number(slug),
+      },
+      data: {
+        houseSize: body.houseSize,
+      },
+    });
+  return NextResponse.json({
+    message: "Data berhasil diubah",
+    success: true,
+  });
+};
