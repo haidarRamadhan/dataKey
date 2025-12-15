@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 import joblib
 import numpy as np
+import os
 
 app = FastAPI()
 
+print("FILES:", os.listdir("."))
 # Load model
 model = joblib.load("model.joblib")
+
+print("MODEL LOADED")
 
 
 @app.post("/predict")
