@@ -15,7 +15,7 @@ export default function RootLayout({
       <body>
         {/* Navbar muncul di semua halaman */}
         <nav>
-          <Link href="/">Home</Link> | <Link href="/about">About</Link>
+          <Link href="/">Home</Link> | <Link href="/about">About</Link> | <Link href={"/history"}>History</Link >
         </nav>
         {/* Tempat page.tsx dirender */}
         <main>{children}</main>
