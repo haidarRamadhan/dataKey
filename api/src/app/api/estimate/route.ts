@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     // if data houseSize is exist
     if (check_data) {
       return NextResponse.json({
-        message: "Ukuran rumah sudah ada ",
+        message: "Ukuran rumah sudah ada di history ",
         success: false,
       });
     } else {
