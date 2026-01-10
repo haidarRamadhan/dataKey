@@ -26,14 +26,65 @@ export default function HistoryPage() {
     }, []);
 
     return (
-        <main>
-            <h1>History</h1>
-            {data.map((item) => (
-                <div key={item.id}>
-                    Size: {item.houseSize} | Price: {item.price}
-                    <button onClick={() => handleDelete(item.id)}>Delete</button>
-                </div>
-            ))}
+        <main style={styles.container}>
+            <h1 style={styles.title}>📜 Prediction History</h1>
+
+            <div style={styles.list}>
+                {data.length === 0 && <p style={styles.empty}>No data yet.</p>}
+
+                {data.map((item) => (
+                    <div key={item.id} style={styles.card}>
+                        <div style={styles.info}>
+                            <span><b>Size:</b> {item.houseSize}</span>
+                            <span><b>Price:</b> {item.price}</span>
+                        </div>
+                        <button
+                            style={styles.deleteBtn}
+                            onClick={() => handleDelete(item.id)}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                ))}
+            </div>
         </main>
     );
 }
+
+const styles = {
+    container: {
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column" as const,
+        alignItems: "center",
+        padding: "40px",
+        gap: "30px",
+        background: "linear-gradient(135deg, #0f172a, #020617)",
+        color: "white",
+    },
+    title: { fontSize: "28px", fontWeight: "bold" },
+    list: {
+        display: "flex",
+        flexDirection: "column" as const,
+        gap: "12px",
+        width: "480px",
+    },
+    card: {
+        display: "flex",
+        justifyContent: "space-between",
+        background: "#020617",
+        border: "1px solid #1e293b",
+        borderRadius: "10px",
+        padding: "16px",
+    },
+    info: { display: "flex", gap: "20px" },
+    deleteBtn: {
+        background: "#ef4444",
+        color: "white",
+        border: "none",
+        padding: "8px 14px",
+        borderRadius: "6px",
+        cursor: "pointer",
+    },
+    empty: { color: "#94a3b8" },
+};
