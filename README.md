@@ -1,7 +1,6 @@
-
 Mohon check video di bawah untuk check hasil websitenya
 
-https://github.com/user-attachments/assets/449fb772-1ce4-4f20-9629-377193006426
+https://github.com/user-attachments/assets/29ecc2f0-59ab-4e97-bb4a-2c140088b99c
 
 
 Cara Menjalankan Project Lokal
