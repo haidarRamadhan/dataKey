@@ -15,6 +15,7 @@ export default function HomePage() {
   const [houseSize, setHouseSize] = useState("");
   const [result, setResult] = useState<Estimate | null>(null);
   const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState("");
 
   // ==================
   // POST (PREDICT ONLY)
@@ -23,6 +24,7 @@ export default function HomePage() {
     if (!houseSize) return;
 
     setLoading(true);
+    setWarning("");
 
     const res = await fetch("/api/estimate", {
       method: "POST",
@@ -31,7 +33,16 @@ export default function HomePage() {
     });
 
     const json = await res.json();
-    setResult(json.data); // ⬅️ hanya simpan hasil terakhir
+
+    // ⛔ ukuran sudah ada di history
+    if (json.success === false) {
+      setWarning(json.message);
+      setLoading(false);
+      return;
+    }
+
+    // ✅ hasil baru
+    setResult(json.data);
 
     setHouseSize("");
     setLoading(false);
@@ -50,13 +61,24 @@ export default function HomePage() {
           onChange={(e) => setHouseSize(e.target.value)}
           style={styles.input}
         />
-        <button onClick={handlePredict} style={styles.primaryBtn}>
+        <button
+          onClick={handlePredict}
+          style={styles.primaryBtn}
+          disabled={loading}
+        >
           {loading ? "Loading..." : "Predict"}
         </button>
       </div>
 
+      {/* WARNING */}
+      {warning && (
+        <div style={styles.warning}>
+          ⚠️ {warning}
+        </div>
+      )}
+
       {/* RESULT (ONLY ONE) */}
-      {result && (
+      {result && !warning && (
         <div style={styles.card}>
           <span>
             <b>Size:</b> {result.houseSize} |{" "}
@@ -104,6 +126,11 @@ const styles = {
     border: "none",
     borderRadius: "6px",
     cursor: "pointer",
+    fontWeight: "bold",
+    opacity: 1,
+  },
+  warning: {
+    color: "#facc15",
     fontWeight: "bold",
   },
   card: {
