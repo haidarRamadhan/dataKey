@@ -1,7 +1,6 @@
 **Mohon check video di bawah untuk lihat hasil websitenya**
 
-https://github.com/user-attachments/assets/29ecc2f0-59ab-4e97-bb4a-2c140088b99c
-
+[Website result.webm](https://github.com/user-attachments/assets/c4ce477c-dc48-4e5a-922a-8b0b10bf7154)
 
 Cara Menjalankan Project Lokal
 
