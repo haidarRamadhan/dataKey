@@ -10,16 +10,6 @@ export default function AboutPage() {
                 </div>
 
                 <div style={aboutStyles.card}>
-                    <span>Developer</span>
-                    <span>Haidar Ramadhan</span>
-                </div>
-
-                <div style={aboutStyles.card}>
-                    <span>Developer</span>
-                    <span>Jeremia Julianto</span>
-                </div>
-
-                <div style={aboutStyles.card}>
                     <span>Institution</span>
                     <span>Universitas Teknokrat Indonesia</span>
                 </div>
