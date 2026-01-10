@@ -1,4 +1,4 @@
-**Mohon check video di bawah untuk check hasil websitenya**
+**Mohon check video di bawah untuk lihat hasil websitenya**
 
 https://github.com/user-attachments/assets/29ecc2f0-59ab-4e97-bb4a-2c140088b99c
 
