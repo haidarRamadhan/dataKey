@@ -1,11 +1,18 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 type Rumah = {
     id: number;
     houseSize: number;
-    price: number;
+    price: number; // masih dalam JUTA
 };
+
+// ==================
+// FORMATTER
+// ==================
+const formatRupiah = (priceInMillion: number) =>
+    (priceInMillion * 1_000_000).toLocaleString("id-ID");
 
 export default function HistoryPage() {
     const [data, setData] = useState<Rumah[]>([]);
@@ -30,14 +37,21 @@ export default function HistoryPage() {
             <h1 style={styles.title}>📜 Prediction History</h1>
 
             <div style={styles.list}>
-                {data.length === 0 && <p style={styles.empty}>No data yet.</p>}
+                {data.length === 0 && (
+                    <p style={styles.empty}>No prediction data yet.</p>
+                )}
 
                 {data.map((item) => (
                     <div key={item.id} style={styles.card}>
                         <div style={styles.info}>
-                            <span><b>Size:</b> {item.houseSize}</span>
-                            <span><b>Price:</b> {item.price}</span>
+                            <div>
+                                <b>Size:</b> {item.houseSize} m²
+                            </div>
+                            <div>
+                                <b>Price:</b> Rp {formatRupiah(item.price)}
+                            </div>
                         </div>
+
                         <button
                             style={styles.deleteBtn}
                             onClick={() => handleDelete(item.id)}
@@ -51,6 +65,9 @@ export default function HistoryPage() {
     );
 }
 
+// ==================
+// STYLES
+// ==================
 const styles = {
     container: {
         minHeight: "100vh",
@@ -62,22 +79,30 @@ const styles = {
         background: "linear-gradient(135deg, #0f172a, #020617)",
         color: "white",
     },
-    title: { fontSize: "28px", fontWeight: "bold" },
+    title: {
+        fontSize: "28px",
+        fontWeight: "bold",
+    },
     list: {
         display: "flex",
         flexDirection: "column" as const,
-        gap: "12px",
-        width: "480px",
+        gap: "14px",
+        width: "520px",
     },
     card: {
         display: "flex",
         justifyContent: "space-between",
+        alignItems: "center",
         background: "#020617",
         border: "1px solid #1e293b",
-        borderRadius: "10px",
-        padding: "16px",
+        borderRadius: "12px",
+        padding: "16px 20px",
     },
-    info: { display: "flex", gap: "20px" },
+    info: {
+        display: "flex",
+        flexDirection: "column" as const,
+        gap: "4px",
+    },
     deleteBtn: {
         background: "#ef4444",
         color: "white",
@@ -85,6 +110,10 @@ const styles = {
         padding: "8px 14px",
         borderRadius: "6px",
         cursor: "pointer",
+        fontWeight: "bold",
     },
-    empty: { color: "#94a3b8" },
+    empty: {
+        color: "#94a3b8",
+        textAlign: "center" as const,
+    },
 };
