@@ -5,8 +5,14 @@ import { useEffect, useState } from "react";
 type Rumah = {
     id: number;
     houseSize: number;
-    price: number;
+    price: number; // masih dalam JUTA
 };
+
+// ==================
+// FORMATTER
+// ==================
+const formatRupiah = (priceInMillion: number) =>
+    (priceInMillion * 1_000_000).toLocaleString("id-ID");
 
 export default function DashboardPage() {
     const [data, setData] = useState<Rumah[]>([]);
@@ -20,10 +26,12 @@ export default function DashboardPage() {
     }, []);
 
     const total = data.length;
+
     const avg =
         total > 0
             ? Math.round(data.reduce((a, b) => a + b.price, 0) / total)
             : 0;
+
     const max = total > 0 ? Math.max(...data.map((d) => d.price)) : 0;
     const min = total > 0 ? Math.min(...data.map((d) => d.price)) : 0;
 
@@ -39,23 +47,26 @@ export default function DashboardPage() {
 
                 <div style={styles.card}>
                     <span>Average Price</span>
-                    <b>{avg}</b>
+                    <b>Rp {formatRupiah(avg)}</b>
                 </div>
 
                 <div style={styles.card}>
                     <span>Highest Price</span>
-                    <b>{max}</b>
+                    <b>Rp {formatRupiah(max)}</b>
                 </div>
 
                 <div style={styles.card}>
                     <span>Lowest Price</span>
-                    <b>{min}</b>
+                    <b>Rp {formatRupiah(min)}</b>
                 </div>
             </div>
         </main>
     );
 }
 
+// ==================
+// STYLES
+// ==================
 const styles = {
     container: {
         minHeight: "100vh",
@@ -72,16 +83,16 @@ const styles = {
         display: "grid",
         gridTemplateColumns: "repeat(2, 1fr)",
         gap: "20px",
-        maxWidth: "600px",
+        maxWidth: "620px",
     },
     card: {
         background: "#020617",
         border: "1px solid #1e293b",
-        borderRadius: "12px",
+        borderRadius: "14px",
         padding: "24px",
         display: "flex",
         flexDirection: "column" as const,
-        gap: "10px",
+        gap: "8px",
         fontSize: "18px",
     },
 };
