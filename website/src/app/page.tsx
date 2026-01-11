@@ -8,18 +8,24 @@ import { useState } from "react";
 type Estimate = {
   id: number;
   houseSize: number;
-  price: number;
+  price: number; // masih dalam JUTA
 };
 
+// ==================
+// FORMATTER
+// ==================
+const formatRupiah = (priceInMillion: number) =>
+  (priceInMillion * 1_000_000).toLocaleString("id-ID");
+
+// ==================
+// COMPONENT
+// ==================
 export default function HomePage() {
   const [houseSize, setHouseSize] = useState("");
   const [result, setResult] = useState<Estimate | null>(null);
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState("");
 
-  // ==================
-  // POST (PREDICT ONLY)
-  // ==================
   const handlePredict = async () => {
     if (!houseSize) return;
 
@@ -34,16 +40,13 @@ export default function HomePage() {
 
     const json = await res.json();
 
-    // ⛔ ukuran sudah ada di history
     if (json.success === false) {
       setWarning(json.message);
       setLoading(false);
       return;
     }
 
-    // ✅ hasil baru
     setResult(json.data);
-
     setHouseSize("");
     setLoading(false);
   };
@@ -56,7 +59,7 @@ export default function HomePage() {
       <div style={styles.form}>
         <input
           type="number"
-          placeholder="House size"
+          placeholder="House size (m²)"
           value={houseSize}
           onChange={(e) => setHouseSize(e.target.value)}
           style={styles.input}
@@ -71,19 +74,15 @@ export default function HomePage() {
       </div>
 
       {/* WARNING */}
-      {warning && (
-        <div style={styles.warning}>
-          ⚠️ {warning}
-        </div>
-      )}
+      {warning && <div style={styles.warning}>⚠️ {warning}</div>}
 
-      {/* RESULT (ONLY ONE) */}
+      {/* RESULT */}
       {result && !warning && (
         <div style={styles.card}>
-          <span>
-            <b>Size:</b> {result.houseSize} |{" "}
-            <b>Price:</b> {result.price}
-          </span>
+          <div><b>Size:</b> {result.houseSize} m²</div>
+          <div>
+            <b>Price:</b> Rp {formatRupiah(result.price)}
+          </div>
         </div>
       )}
     </main>
@@ -127,7 +126,6 @@ const styles = {
     borderRadius: "6px",
     cursor: "pointer",
     fontWeight: "bold",
-    opacity: 1,
   },
   warning: {
     color: "#facc15",
@@ -137,7 +135,10 @@ const styles = {
     background: "#020617",
     border: "1px solid #1e293b",
     borderRadius: "10px",
-    padding: "16px 20px",
+    padding: "18px 24px",
     fontSize: "16px",
+    display: "flex",
+    flexDirection: "column" as const,
+    gap: "6px",
   },
 };
