@@ -30,7 +30,7 @@ api/yarn-debug.log*
 api/yarn-error.log*
 api/.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files (can opt-in for committing if needed
 api/.env*
 
 # vercel
