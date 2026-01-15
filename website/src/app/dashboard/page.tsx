@@ -1,44 +1,55 @@
 "use client";
+// Tells Next.js this component runs on the client (uses hooks, browser APIs)
 
 import { useEffect, useState } from "react";
 
+// Type definition for house data
 type Rumah = {
     id: number;
     houseSize: number;
-    price: number; // masih dalam JUTA
+    price: number; // price is stored in MILLION rupiah
 };
 
 // ==================
 // FORMATTER
 // ==================
+// Convert million rupiah → full rupiah format (ID locale)
 const formatRupiah = (priceInMillion: number) =>
     (priceInMillion * 1_000_000).toLocaleString("id-ID");
 
 export default function DashboardPage() {
+    // State to store fetched house data
     const [data, setData] = useState<Rumah[]>([]);
 
+    // Fetch prediction data once when page loads
     useEffect(() => {
         (async () => {
             const res = await fetch("/api/estimate");
             const json = await res.json();
-            setData(json.rumah);
+            setData(json.rumah); // save data into state
         })();
     }, []);
 
+    // Total number of records
     const total = data.length;
 
+    // Average price (still in million)
     const avg =
         total > 0
             ? Math.round(data.reduce((a, b) => a + b.price, 0) / total)
             : 0;
 
+    // Highest price
     const max = total > 0 ? Math.max(...data.map((d) => d.price)) : 0;
+
+    // Lowest price
     const min = total > 0 ? Math.min(...data.map((d) => d.price)) : 0;
 
     return (
         <main style={styles.container}>
             <h1 style={styles.title}>📊 Dashboard</h1>
 
+            {/* Summary cards */}
             <div style={styles.grid}>
                 <div style={styles.card}>
                     <span>Total Data</span>
@@ -67,6 +78,7 @@ export default function DashboardPage() {
 // ==================
 // STYLES
 // ==================
+// Inline styling object for layout & theme
 const styles = {
     container: {
         minHeight: "100vh",
