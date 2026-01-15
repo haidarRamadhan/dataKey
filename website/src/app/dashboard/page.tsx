@@ -11,8 +11,8 @@ type Rumah = {
 };
 
 // ==================
-// FORMATTER
-// ==================
+// formatter
+
 // Convert million rupiah → full rupiah format (ID locale)
 const formatRupiah = (priceInMillion: number) =>
     (priceInMillion * 1_000_000).toLocaleString("id-ID");

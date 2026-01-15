@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 
 // ==================
 // TIPE DATA
-// ==================
+
+
 // Representasi 1 data prediksi rumah
 type Rumah = {
     id: number;
@@ -14,7 +15,7 @@ type Rumah = {
 
 // ==================
 // FORMATTER
-// ==================
+
 // Mengubah harga dari juta → Rupiah (format Indonesia)
 const formatRupiah = (priceInMillion: number) =>
     (priceInMillion * 1_000_000).toLocaleString("id-ID");
@@ -25,7 +26,8 @@ export default function HistoryPage() {
 
     // ==================
     // FETCH DATA HISTORY
-    // ==================
+
+
     // Ambil semua data prediksi dari API
     const fetchData = async () => {
         const res = await fetch("/api/estimate");
