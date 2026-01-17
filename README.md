@@ -48,3 +48,5 @@ Pastikan API (localhost:3000) dan ML model (localhost:5000) jalan sebelum akses 
 Kalau port bentrok, bisa ganti port di package.json / server.py.
 
 test
+
+gh6t5 gh f
