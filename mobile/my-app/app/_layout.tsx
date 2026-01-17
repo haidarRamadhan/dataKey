@@ -1,24 +1,20 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { Tabs } from "expo-router";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
+// This component defines the bottom tab navigation layout
+export default function TabLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Tabs>
+      {/* Home tab → maps to app/index.tsx */}
+      <Tabs.Screen name="index" options={{ title: "Home" }} />
+
+      {/* Dashboard tab → maps to app/dashboard.tsx */}
+      <Tabs.Screen name="dashboard" options={{ title: "Dashboard" }} />
+
+      {/* History tab → maps to app/history.tsx */}
+      <Tabs.Screen name="history" options={{ title: "History" }} />
+
+      {/* About tab → maps to app/about.tsx */}
+      <Tabs.Screen name="about" options={{ title: "About" }} />
+    </Tabs>
   );
 }
