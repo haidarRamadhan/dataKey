@@ -45,3 +45,5 @@ api/src/generated/prisma
 venv
 note.txt
 react
+
+mobile/my-app/node_modules
